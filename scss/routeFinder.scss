@@ -1,0 +1,22 @@
+#opt-map {
+	height: 92vh;
+}
+
+.routelabel {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	
+	color: #fff;
+	font-family: Helvetica Neue, Helvetica, arial;
+	font-size: 10px;
+	width:230px;
+	height:25px;
+	overflow:hidden;
+}
+
+#opt-total-cost {
+	text-align: center;
+	margin-bottom: 12px;
+}

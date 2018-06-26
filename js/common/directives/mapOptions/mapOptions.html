@@ -1,0 +1,60 @@
+<div id="map-options">
+	<uib-accordion close-others="true">
+		<uib-accordion-group is-open="isHeatmapOpen" ui-sref="heatmap" template-url="js/common/directives/sidePanel/accordion-group.html">
+			<uib-accordion-heading>
+			    Heatmap <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isHeatmapOpen, 'glyphicon-chevron-right': !isHeatmapOpen}"></i>
+			</uib-accordion-heading>
+			<!-- $event.stopPropagation(); is needed to be able to click checkboxes and radio buttons inside the accordion -->
+			<div id="heatmapSelector">
+			    <input type="radio" id="radio-tMap" name="hm-radios" ng-value="all" ng-click="$event.stopPropagation(); setHeatmapType('time');" checked>
+			    <label for="radio-tMap">Time Heatmap</label>
+			    <br>
+			    <input type="radio" id="radio-dMap" name="hm-radios" ng-value="false" ng-click="$event.stopPropagation(); setHeatmapType('distance');">
+			    <label for="radio-dMap">Distance Heatmap</label>
+			</div>
+			<hr>
+			<div id="showLocations">
+			    <input type="checkbox" id="checkbox-showLoc" ng-model="checkbox.value1" ng-click="$event.stopPropagation(); toggleMarkers();">
+			    <label for="checkbox-showLoc">Show Locations</label>
+			</div>
+		</uib-accordion-group>
+		
+		<uib-accordion-group is-open="isRouteFinderOpen" ui-sref="routeFinder" template-url="js/common/directives/sidePanel/accordion-group.html">
+			<uib-accordion-heading>
+			    Optimized Route <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isRouteFinderOpen, 'glyphicon-chevron-right': !isRouteFinderOpen}"></i>
+			</uib-accordion-heading>
+			<div class="center">
+				<button type="button" class="btn btn-primary" id="opt-calcRoute-button" ng-click="calcOptimalRoute()" disabled>Calculate Route</button>
+				<button type="button" class="btn btn-primary" ng-click="clearOptimalRouteMap()">Clear</button>
+			</div>
+			<div id="opt-directions-panel" ng-show="showOptRouteDirections">
+				<hr>
+				<div id="opt-total-cost"></div>
+				<div class="panel-header center">
+					<span>Directions <span id="opt-toFrom-txt">to</span> mill</span>
+					<button type="button" class="btn btn-default btn-xs" id="opt-reverse-button" ng-click='revOptimalDirections()'>Reverse</button>
+				</div>
+				<div class="directions-list" id="opt-directions-list"></div>
+			</div>
+		</uib-accordion-group>
+		
+		<uib-accordion-group is-open="isRouteSelectorOpen" ui-sref="routeSelector" template-url="js/common/directives/sidePanel/accordion-group.html">
+			<uib-accordion-heading>
+			    User Specified Route <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isRouteSelectorOpen, 'glyphicon-chevron-right': !isRouteSelectorOpen}"></i>
+			</uib-accordion-heading>
+			<div class="center">
+				<button type="button" class="btn btn-primary" id="sel-calcRoute-button" ng-click="calcSelectedRoute()" disabled>Calculate Route</button>
+				<button type="button" class="btn btn-primary" ng-click="clearSelectedRouteMap()">Clear</button>
+			</div>
+			<div id="sel-directions-panel" ng-show="showSelRouteDirections">
+				<hr>
+				<div id="sel-total-cost"></div>
+				<div class="panel-header center">
+					<span>Directions <span id="sel-toFrom-txt">to</span> mill</span>
+					<button type="button" class="btn btn-default btn-xs" id="sel-reverse-button" ng-click='revSelectedDirections()'>Reverse</button>
+				</div>
+				<div class="directions-list" id="sel-directions-list"></div>
+			</div>
+		</uib-accordion-group>
+	</uib-accordion>
+</div>

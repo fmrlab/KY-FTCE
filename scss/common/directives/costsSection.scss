@@ -1,0 +1,105 @@
+#costs {
+	/* Remove default arrows from input box */
+	input[type=number]::-webkit-outer-spin-button,
+	input[type=number]::-webkit-inner-spin-button {
+	    -webkit-appearance: none;
+	    margin: 0;
+	}
+
+	input[type=number] {
+	    -moz-appearance:textfield;
+	}
+}
+
+#inputData {
+	.form-control {
+		height: 25px;
+	}
+
+	button {
+		margin: 10px auto;
+	}
+
+	td:nth-child(1) {
+		width: 40%;
+	}
+
+	td:nth-child(2) {
+		width: 5%;
+		text-align: center;
+	}
+
+	td:nth-child(3) {
+		width: 25%;
+		text-align: center;
+	}
+
+	td:nth-child(4) {
+		width: 5%;
+	}
+
+	td:nth-child(5) {
+		width: 5%;
+		text-align: center;
+	}
+}
+
+
+#userDefinedCost {
+	margin: 5px auto 10px;
+	text-align: center;
+
+	.form-control {
+		width: 50%;
+		height: 25px;
+		display: inline-block;
+		padding: 2px;
+	}
+}
+
+
+#calculations td:nth-child(1),
+#ownershipCosts td:nth-child(1),
+#operatingCosts td:nth-child(1),
+#totalCosts td:nth-child(1) {
+	width: 70%;
+}
+
+#calculations td:nth-child(2),
+#ownershipCosts td:nth-child(2),
+#operatingCosts td:nth-child(2),
+#totalCosts td:nth-child(2) {
+	width: 25%;
+	text-align: right;
+}
+
+#calculations td:nth-child(3),
+#ownershipCosts td:nth-child(3),
+#operatingCosts td:nth-child(3),
+#totalCosts td:nth-child(3) {
+	text-align: right;
+}
+
+#costCalculations {
+	margin: auto -5px;
+
+	table {
+		width: 100%;
+	}
+
+	table td { 
+		padding: 2px 0; 
+	}
+
+	tr {
+		font-size: 0.75em;
+	}
+
+	/* Set input box width */
+	input[type=number] {
+		width: 95%;
+	    padding: 2px;
+	    margin: 0px;
+	    border: 1px solid #CCC;
+	}
+}

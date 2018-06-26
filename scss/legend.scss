@@ -1,0 +1,74 @@
+.legend {
+	background: white;
+	padding: 5px;
+	border: 1px solid black;
+	top: 5px !important;
+	right: 5px !important;
+
+	h5 {
+		margin: 0;
+		text-align: center;
+	}
+
+	.legendContent {
+		td {
+			padding: 3px 0;
+		}
+	}
+
+	.legendLabel {
+		width: 50px;
+	}
+
+}
+
+#routeSelector-legend {
+	padding: 5px 5px 5px 0;
+}
+
+/* Heatmap rules */
+
+.legendBlock {
+	border: 1px solid black;
+	width: 2em;
+	height: 1.25em;
+	margin-top: 0.5em;
+	opacity: 0.45;
+	display: inline-block;
+}
+
+#legendBlock0 {
+	background-color: #00ff00;
+}
+
+#legendBlock1 {
+	background-color: #8eff00;
+}
+
+#legendBlock2 {
+	background-color: #e3ff00;
+}
+
+#legendBlock3 {
+	background-color: #ffff00;
+}
+
+#legendBlock4 {
+	background-color: #ffd100;
+}
+
+#legendBlock5 {
+	background-color: #ff9400;
+}
+
+#legendBlock6 {
+	background-color: #ff0000;
+}
+
+/* Route Finder and Selector */
+.legendIcon {
+	text-align: center;
+	img {
+		height: 32px;
+	}
+}

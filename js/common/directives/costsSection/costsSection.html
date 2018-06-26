@@ -1,0 +1,28 @@
+<div id="costs">
+	<uib-accordion close-others="false">
+		<uib-accordion-group is-open="isCostsOpen" template-url="js/common/directives/sidePanel/accordion-group.html">
+			<uib-accordion-heading>
+			    Cost Estimations <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isCostsOpen, 'glyphicon-chevron-right': !isCostsOpen}"></i>
+			</uib-accordion-heading>
+			<div id="costsSelector">
+				<div>
+				    <input type="radio" id="radio-user-cost" name="cost-radios" ng-value="true" ng-model="cost.isUserDefined" checked>
+				    <label for="radio-user-cost">User Defined Cost</label>
+			    </div>
+			    <div ng-show="cost.isUserDefined" id="userDefinedCost">
+			    	<label for="input-user-cost">$</label>
+			    	<input type="number" class="form-control" id="input-user-cost" ng-model="rate.userDefined" ng-change="setUserDefined()">
+			    	<label for="input-user-cost">/hr</label>
+			    </div>
+			    <div>
+				    <input type="radio" id="radio-calculate-cost" name="cost-radios" ng-value="false" ng-model="cost.isUserDefined">
+				    <label for="radio-calculate-cost">Calculate Cost</label>
+			    </div>
+			</div>
+			
+			<cost-calculations ng-hide="cost.isUserDefined"></cost-calculations>
+
+		</uib-accordion-group>
+
+	</uib-accordion>
+</div>

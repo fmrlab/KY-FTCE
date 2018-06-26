@@ -1,0 +1,37 @@
+#side-panel {
+	background-color: #fafafa;
+	width: 256px;
+	float: left;
+	font-family: Arial, Verdana;
+	max-height: 92vh;
+	overflow-y: scroll;
+
+	/* Need position:relative to avoid Chrome bug in which accordion disappears */
+	position: relative;
+
+	hr {
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+
+	label {
+		font-weight: 100;
+	}
+}
+
+.section-title {
+	margin-left: 15px;
+}
+
+#enableCosts {
+	margin-left: 15px;
+	label {
+		font-weight: normal;
+	}
+}
+
+.panel-heading {
+	cursor: pointer;
+}
+
+

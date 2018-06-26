@@ -1,0 +1,32 @@
+#header {	
+	text-align: center;
+	display:table;
+    border-collapse:collapse;
+    width:100%;
+    background-color: #FFF;
+
+    div {
+    	display:table-cell;
+    }
+}
+
+#ukLogo {
+	width: 80px;
+	padding-top: 5px;
+	height: 100%;
+
+	img {
+		width: 100%;
+	}
+}
+
+#pageTitle {
+	vertical-align: middle;
+	background-image: url(./images/header/Unnamed%20QQ%20Screenshot20140623113706.png);
+	background-repeat: repeat;
+
+	font-size: 1.75em;
+	color: #FFF;
+	font-variant: normal;
+	font-weight: bold;
+}

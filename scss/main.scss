@@ -1,0 +1,20 @@
+html,
+body {
+	margin:0;
+	padding:0;
+	height:100%;
+	-ms-overflow-style: scrollbar;
+}
+
+.center {
+	text-align: center;
+}
+
+@import 'common/directives/pageHeader';
+@import 'common/directives/sidePanel';
+@import 'common/directives/mapOptions';
+@import 'common/directives/costsSection';
+@import 'legend';
+@import 'heatmap';
+@import 'routeFinder';
+@import 'routeSelector';

@@ -1,0 +1,209 @@
+<div id="costCalculations">
+	<hr>
+	<div id="inputData">
+		<table>
+			<caption>Input Data</caption>
+		    <tr>
+		        <td>Purchase price (P)</td>
+		        <td>$</td>
+		        <td><input type="number" class="form-control" id="purchase-price" ng-model="input.purchasePrice"></td>
+		        <td> </td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="Enter purchase price (current value) of the truck." tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Machine horsepower rating (hp)</td>
+		        <td> </td>
+		        <td><input type="number" class="form-control" id="hp-rating" ng-model="input.hpRating"></td>
+		        <td>hp</td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="Enter engine horsepower." tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Machine life (n)</td>
+		        <td> </td>
+		        <td><input type="number" class="form-control" id="machine-life" ng-model="input.machineLife"></td>
+		        <td>yrs</td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="Number of years the truck is expected to work fulltime from acquisition time to retirement." tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Salvage value, percent of purchase price (rv%)</td>
+		        <td> </td>
+		        <td><input type="number" class="form-control" id="salvage-percent" ng-model="input.salvagePercent"></td>
+		        <td>%</td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="Expected value of the truck at retirement as a percent of the purchace value entered above." tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Utilization rate (ut%)</td>
+		        <td> </td>
+		        <td><input type="number" class="form-control" id="utilization-rate" ng-model="input.utilizationRate"></td>
+		        <td>%</td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="Percent of hours of actual work (i.e., driving, loading, unloading) in a typical work shift." tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Repair and Maintenance, percent of depreciation (rm%)</td>
+		        <td> </td>
+		        <td><input type="number" class="form-control" id="repairMaintenance-percent" ng-model="input.repairMaintPercent"></td>
+		        <td>%</td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="Estimate the cost of repairs and maintenance for a typical year. Then, calculate depreciation by subtracting the salvage value from the purchase price and then dividing it by the machine life. Now enter repair and maintenance costs as a percent of the depreciation." tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Interest Rate (in%)</td>
+		        <td> </td>
+		        <td><input type="number" class="form-control" id="interest-rate" ng-model="input.interestRate"></td>
+		        <td>%</td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="Interest rate should represent the return on investent of the capital emboddied in the truck if invested in an alternative source. If a load was used to purchase the truck, the loan interest rate should be used.  Interest rate values typically range from 5% to 10%." tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Insurance and tax rate (it%)</td>
+		        <td> </td>
+		        <td><input type="number" class="form-control" id="insuranceTax-rate" ng-model="input.insuranceTaxRate"></td>
+		        <td>%</td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="Insurace and tax rates vary based on location and equipment characteristics, but typical values range from 2% to 5%." tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Fuel consumption rate (fcr)</td>
+		        <td> </td>
+		        <td><input type="number" class="form-control" id="fuel-rate" ng-model="input.fuelConsumptionRate"></td>
+		        <td>gal/hp-hr</td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="Fuel consumption rate in gal/hp-hr can be calculated as follows: Divide gas mileage (mi/gal) by the truck horsepower (hp) and average driving speed (mi/hr). For example, considering a gas mileage of 5 mi/gal of a truck with 400 hp and an average driving speed of 60 mi/hr, the fuel consumption rate is 0.0002 gal/hp-hr." tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Fuel cost (fcg)</td>
+		        <td>$</td>
+		        <td><input type="number" class="form-control" id="fuelGallon-cost" ng-model="input.fuelCost"></td>
+		        <td>per gal</td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="Average fuel cost per gallon" tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Lube and oil, percent of fuel cost (lo%)</td>
+		        <td> </td>
+		        <td><input type="number" class="form-control" id="lubeOil" ng-model="input.lubeOilPercent"></td>
+		        <td>%</td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="Estimate the cost of oil and lube as well as the cost of fuel for a typical year (or month). Enter the oil and lube cost as a percent of the fuel cost." tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Operator wage and benefit rate (WB)</td>
+		        <td>$</td>
+		        <td><input type="number" class="form-control" id="operator-wage" ng-model="input.operatorWage"></td>
+		        <td>hr</td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="Enter operator wage including benefit." tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Scheduled machine hours (SMH)</td>
+		        <td> </td>
+		        <td><input type="number" class="form-control" id="scheduled-machineHours" ng-model="input.scheduledMachineHrs"></td>
+		        <td>hrs/yr</td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="Total number of hours the truck is expected to work in a year. This can be estimated by multiplying the typical work shift duration (hr/day) by the number of days the truck is expected to work in a year.?" tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		</table>
+		<button type="button" class="btn btn-primary btn-block" ng-click="calculate()">Calculate Cost</button>
+	</div>
+
+	<div id="calculations">
+		<table>
+			<caption>Calculations</caption>
+		    <tr>
+		        <td>Salvage value (S)</td>
+		        <td id="salvage-value" ng-bind="salvageValue | number: 2"></td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="S = P * rv%" tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Annual depreciation (AD)</td>
+		        <td id="annual-depreciation" ng-bind="annualDepreciation | number: 2"></td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="AD = ((P-S)/n)" tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Average yearly investment (AYI)</td>
+		        <td id="avg-yearlyInvestment" ng-bind="avgYearInvestment | number: 2"></td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="AYI = (((P-S)*(n+1))/(2*n)) + S" tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Productive machine hours (PMH)</td>
+		        <td id="productive-machineHours" ng-bind="productiveMachineHrs | number: 2"></td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="PMH = SMH * ut%" tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		</table>
+	</div>
+
+	<div id="ownershipCosts">
+		<table>
+			<caption>Ownership Costs</caption>
+		    <tr>
+		        <td>Interest cost (IN)</td>
+		        <td id="interest-cost" ng-bind="interestCost | number: 2"></td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="IN = in% * AYI" tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Insurance and tax cost (IT)</td>
+		        <td id="insuranceTax-cost" ng-bind="insuranceTaxCost | number: 2"></td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="IT = it% * AYI" tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Yearly ownership cost (YF$)</td>
+		        <td id="yearlyOwnership-cost" ng-bind="yearOwnerCost | number: 2"></td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="YF$ = AD + IN + IT" tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Ownership cost per SMH (F$SMH)</td>
+		        <td id="ownershipCost-smh" ng-bind="ownershipCostSMH | number: 2"></td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="F$SMH = YF$/SMH" tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Ownership cost per PMH (F$PMH)</td>
+		        <td id="ownershipCost-pmh" ng-bind="ownershipCostPMH | number: 2"></td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="F$PMH = YF$/PMH" tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		</table>
+	</div>
+
+	<div id="operatingCosts">
+		<table>
+			<caption>Operating Costs</caption>
+		    <tr>
+		        <td>Fuel cost (F)</td>
+		        <td id="fuel-cost" ng-bind="fuelCost | number: 2"></td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="F = hp * fcr * fcg" tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Lube cost (L)</td>
+		        <td id="lube-cost" ng-bind="lubeCost | number: 2"></td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="L = F * lo%" tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Repair and Maintenance cost (RM)</td>
+		        <td id="repairMaintenance-cost" ng-bind="repairMaintenanceCost | number: 2"></td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="RM = AD * rm%/PMH" tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Operator labor and benefit cost (LB)</td>
+		        <td id="laborBenefit-cost" ng-bind="laborBenefitCost | number: 2"></td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="LB = WB/ut%" tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Operating cost per SMH (V$SMH)</td>
+		        <td id="operatingCost-smh" ng-bind="operatingCostSMH | number: 2"></td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="V$SMH = V$PMH * ut%" tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Operating cost per PMH (V$PMH)</td>
+		        <td id="operatingCost-pmh" ng-bind="operatingCostPMH | number: 2"></td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="V$PMH = F + L + RM + (WB/ut%)" tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		</table>
+	</div>
+
+	<div id="totalCosts">
+		<table>
+		<caption><b>Total Costs</b></caption>
+		    <tr>
+		        <td>Total cost per SMH (T$SMH)</td>
+		        <td id="totalCost-smh" ng-bind="totalCostSMH | number: 2"></td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="T$SMH = F$SMH + V$SMH" tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		    <tr>
+		        <td>Total cost per PMH (T$PMH)</td>
+		        <td id="totalCost-pmh" ng-bind="totalCostPMH | number: 2"></td>
+		        <td><i class="fa fa-info-circle" aria-hidden="true" uib-tooltip="T$PMH = F$PMH + V$PMH" tooltip-placement="top" tooltip-append-to-body="true"></i></td>
+		    </tr>
+		</table>
+	</div>
+</div>

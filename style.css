@@ -1,0 +1,229 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  -ms-overflow-style: scrollbar; }
+
+.center {
+  text-align: center; }
+
+#header {
+  text-align: center;
+  display: table;
+  border-collapse: collapse;
+  width: 100%;
+  background-color: #FFF; }
+  #header div {
+    display: table-cell; }
+
+#ukLogo {
+  width: 80px;
+  padding-top: 5px;
+  height: 100%; }
+  #ukLogo img {
+    width: 100%; }
+
+#pageTitle {
+  vertical-align: middle;
+  background-image: url(./images/header/Unnamed%20QQ%20Screenshot20140623113706.png);
+  background-repeat: repeat;
+  font-size: 1.75em;
+  color: #FFF;
+  font-variant: normal;
+  font-weight: bold; }
+
+#side-panel {
+  background-color: #fafafa;
+  width: 256px;
+  float: left;
+  font-family: Arial, Verdana;
+  max-height: 92vh;
+  overflow-y: scroll;
+  /* Need position:relative to avoid Chrome bug in which accordion disappears */
+  position: relative; }
+  #side-panel hr {
+    margin-top: 10px;
+    margin-bottom: 10px; }
+  #side-panel label {
+    font-weight: 100; }
+
+.section-title {
+  margin-left: 15px; }
+
+#enableCosts {
+  margin-left: 15px; }
+  #enableCosts label {
+    font-weight: normal; }
+
+.panel-heading {
+  cursor: pointer; }
+
+#map-options {
+  margin-top: 3px; }
+  #map-options .panel-group {
+    margin-bottom: 5px; }
+
+.directions-list {
+  font-size: 12px; }
+
+#costs {
+  /* Remove default arrows from input box */ }
+  #costs input[type=number]::-webkit-outer-spin-button,
+  #costs input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0; }
+  #costs input[type=number] {
+    -moz-appearance: textfield; }
+
+#inputData .form-control {
+  height: 25px; }
+
+#inputData button {
+  margin: 10px auto; }
+
+#inputData td:nth-child(1) {
+  width: 40%; }
+
+#inputData td:nth-child(2) {
+  width: 5%;
+  text-align: center; }
+
+#inputData td:nth-child(3) {
+  width: 25%;
+  text-align: center; }
+
+#inputData td:nth-child(4) {
+  width: 5%; }
+
+#inputData td:nth-child(5) {
+  width: 5%;
+  text-align: center; }
+
+#userDefinedCost {
+  margin: 5px auto 10px;
+  text-align: center; }
+  #userDefinedCost .form-control {
+    width: 50%;
+    height: 25px;
+    display: inline-block;
+    padding: 2px; }
+
+#calculations td:nth-child(1),
+#ownershipCosts td:nth-child(1),
+#operatingCosts td:nth-child(1),
+#totalCosts td:nth-child(1) {
+  width: 70%; }
+
+#calculations td:nth-child(2),
+#ownershipCosts td:nth-child(2),
+#operatingCosts td:nth-child(2),
+#totalCosts td:nth-child(2) {
+  width: 25%;
+  text-align: right; }
+
+#calculations td:nth-child(3),
+#ownershipCosts td:nth-child(3),
+#operatingCosts td:nth-child(3),
+#totalCosts td:nth-child(3) {
+  text-align: right; }
+
+#costCalculations {
+  margin: auto -5px;
+  /* Set input box width */ }
+  #costCalculations table {
+    width: 100%; }
+  #costCalculations table td {
+    padding: 2px 0; }
+  #costCalculations tr {
+    font-size: 0.75em; }
+  #costCalculations input[type=number] {
+    width: 95%;
+    padding: 2px;
+    margin: 0px;
+    border: 1px solid #CCC; }
+
+.legend {
+  background: white;
+  padding: 5px;
+  border: 1px solid black;
+  top: 5px !important;
+  right: 5px !important; }
+  .legend h5 {
+    margin: 0;
+    text-align: center; }
+  .legend .legendContent td {
+    padding: 3px 0; }
+  .legend .legendLabel {
+    width: 50px; }
+
+#routeSelector-legend {
+  padding: 5px 5px 5px 0; }
+
+/* Heatmap rules */
+.legendBlock {
+  border: 1px solid black;
+  width: 2em;
+  height: 1.25em;
+  margin-top: 0.5em;
+  opacity: 0.45;
+  display: inline-block; }
+
+#legendBlock0 {
+  background-color: #00ff00; }
+
+#legendBlock1 {
+  background-color: #8eff00; }
+
+#legendBlock2 {
+  background-color: #e3ff00; }
+
+#legendBlock3 {
+  background-color: #ffff00; }
+
+#legendBlock4 {
+  background-color: #ffd100; }
+
+#legendBlock5 {
+  background-color: #ff9400; }
+
+#legendBlock6 {
+  background-color: #ff0000; }
+
+/* Route Finder and Selector */
+.legendIcon {
+  text-align: center; }
+  .legendIcon img {
+    height: 32px; }
+
+#hm-map {
+  height: 92vh; }
+
+.heatmap-infoWindow p {
+  margin: 0; }
+
+#opt-map {
+  height: 92vh; }
+
+.routelabel {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-family: Helvetica Neue, Helvetica, arial;
+  font-size: 10px;
+  width: 230px;
+  height: 25px;
+  overflow: hidden; }
+
+#opt-total-cost {
+  text-align: center;
+  margin-bottom: 12px; }
+
+#sel-map {
+  height: 92vh; }
+
+#sel-total-cost {
+  text-align: center;
+  margin-bottom: 12px; }
