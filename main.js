@@ -66,9 +66,9 @@ app.factory('HeatmapFactory', function () {
 			}
 
 			var heatmapLayer;
-			for (var i = 0; i < 2; i++) {
+			for (var i = 0; i < 12; i++) {
 				heatmapLayer = new google.maps.KmlLayer({
-					url: 'http://www2.ca.uky.edu/forestry/KY-FTCE/assets/kml-data/' + heatmapType + '/millHeatmap' + i + '.zip', //<---- need to update
+					url: 'http://www2.ca.uky.edu/forestry/KY-FTCE/assets/test_kml_1/' + heatmapType + '/millHeatmap' + i + '.zip', //<---- need to update
 					preserveViewport: true,
 					suppressInfoWindows: true,
 					map: map
