@@ -137,6 +137,7 @@ app.factory('MarkerFactory', ['Mills', '$rootScope', function (Mills, $rootScope
 						draggable: true,
 						position: start,
 						map: map,
+						zIndex = Date.now(),
 						icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
 					});
 					// add click event to open infowindow when marker is clicked

@@ -12,7 +12,7 @@ app.config(['$urlRouterProvider', '$locationProvider', function ($urlRouterProvi
 
 app.factory('HeatmapFactory', function () {
 	var heatmapLayers = [],
-	    mapInit = true;
+		mapInit = true;
 	var heatmapType;
 
 	var showLegend = function (map) {
@@ -141,9 +141,9 @@ app.config(['$stateProvider', function ($stateProvider) {
 }]);
 app.factory('RouteFinderFactory', ['MarkerFactory', 'Location', 'Mills', 'Cost', function (MarkerFactory, Location, Mills, Cost) {
 	var gNumberOfPoints = 6,
-	    theClosestMill,
-	    gDirectionsRenderer,
-	    gDirectionsRenderer2 = null;
+		theClosestMill,
+		gDirectionsRenderer,
+		gDirectionsRenderer2 = null;
 
 	var openAfterReverse = function (renderer, map) {
 		Location.updateText(renderer);
@@ -195,10 +195,10 @@ app.factory('RouteFinderFactory', ['MarkerFactory', 'Location', 'Mills', 'Cost',
 				document.getElementById('opt-calcRoute-button').disabled = true;
 			}
 		},
-		removeCurrentRoute:function(){
+		removeCurrentRoute: function () {
 			var rendererToRemove;
 
-			if(document.getElementById("opt-toFrom-txt").innerHTML == "to") {
+			if (document.getElementById("opt-toFrom-txt").innerHTML == "to") {
 				rendererToRemove = gDirectionsRenderer;
 			}
 			else {
@@ -215,7 +215,7 @@ app.factory('RouteFinderFactory', ['MarkerFactory', 'Location', 'Mills', 'Cost',
 
 			this.removeCurrentRoute();
 
-			if(document.getElementById("opt-toFrom-txt").innerHTML == "to") {
+			if (document.getElementById("opt-toFrom-txt").innerHTML == "to") {
 				document.getElementById("opt-toFrom-txt").innerHTML = "from";
 				rendererToDisplay = gDirectionsRenderer2;
 			}
@@ -224,19 +224,19 @@ app.factory('RouteFinderFactory', ['MarkerFactory', 'Location', 'Mills', 'Cost',
 				rendererToDisplay = gDirectionsRenderer;
 			}
 
-			if(!gDirectionsRenderer2) {
+			if (!gDirectionsRenderer2) {
 				Location.calcRoute(theClosestMill.latLng, endPoint)
-				.then(function (millRoute) {
-					return Location.displayRoute(millRoute, map, null);
-				})
-				.then(function (directionsRenderer) {
-					gDirectionsRenderer2 = directionsRenderer;
-					showCostInfo(directionsRenderer);
-					openAfterReverse(gDirectionsRenderer2, map);
-				})
-				.then(null, function (err) {
-					console.error(err);
-				});	
+					.then(function (millRoute) {
+						return Location.displayRoute(millRoute, map, null);
+					})
+					.then(function (directionsRenderer) {
+						gDirectionsRenderer2 = directionsRenderer;
+						showCostInfo(directionsRenderer);
+						openAfterReverse(gDirectionsRenderer2, map);
+					})
+					.then(null, function (err) {
+						console.error(err);
+					});
 			} else {
 				showCostInfo(rendererToDisplay);
 				openAfterReverse(rendererToDisplay, map);
@@ -282,7 +282,7 @@ app.factory('RouteFinderFactory', ['MarkerFactory', 'Location', 'Mills', 'Cost',
 
 app.factory('SharedVariableFactory', function () {
 	var gZoom = 7;
-	var gCenterPoint = {lat: 37.791322359780914, lng: -85.01533446044925};
+	var gCenterPoint = { lat: 37.791322359780914, lng: -85.01533446044925 };
 	return {
 		getZoom: function () {
 			return gZoom;
@@ -294,21 +294,21 @@ app.factory('SharedVariableFactory', function () {
 			return gCenterPoint;
 		},
 		setMapCenterPoint: function (latitude, longitude) {
-			gCenterPoint = {lat: latitude, lng: longitude};
+			gCenterPoint = { lat: latitude, lng: longitude };
 		}
 	};
-	
+
 });
 
 app.controller('RouteFinderCtrl', ['$scope', '$rootScope', '$state', 'GoogleMaps', 'MarkerFactory', 'RouteFinderFactory', 'Kml', 'SharedVariableFactory', function ($scope, $rootScope, $state, GoogleMaps, MarkerFactory, RouteFinderFactory, Kml, SharedVariableFactory) {
-	var gMap, gUserMarker;
+	var gMap, gUserMarker, gMeasureTool, gDistanceMeasureMode;
 
 	GoogleMaps.loadAPI.then(function () {
 		initMap();
 	});
 
 	function initMap() {
-
+		gDistanceMeasureMode = 0;
 		var zoomLevel = SharedVariableFactory.getZoom();
 		var centerPointLatLng = SharedVariableFactory.getMapCenterPoint();
 		var mapCenterPoint = new google.maps.LatLng(centerPointLatLng.lat, centerPointLatLng.lng);
@@ -316,6 +316,7 @@ app.controller('RouteFinderCtrl', ['$scope', '$rootScope', '$state', 'GoogleMaps
 		gMap = new google.maps.Map(document.getElementById('opt-map'), {
 			zoom: zoomLevel,
 			center: mapCenterPoint,
+			disableDoubleClickZoom: true,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		});
 
@@ -323,24 +324,40 @@ app.controller('RouteFinderCtrl', ['$scope', '$rootScope', '$state', 'GoogleMaps
 		MarkerFactory.displayMarkers(gMap);
 
 		RouteFinderFactory.showLegend(gMap);
-		google.maps.event.addListener(gMap, 'zoom_changed', function() {
+		google.maps.event.addListener(gMap, 'zoom_changed', function () {
 			SharedVariableFactory.setZoom(gMap.getZoom());
 		});
 
-		google.maps.event.addListener(gMap, 'center_changed', function() {
+		google.maps.event.addListener(gMap, 'center_changed', function () {
 			var centerPoint = gMap.getCenter();
 			SharedVariableFactory.setMapCenterPoint(centerPoint.lat(), centerPoint.lng());
 		});
-		
+
 
 		// add click event to place a marker on the map
 		google.maps.event.addListener(gMap, 'click', function (event) {
-			gUserMarker = MarkerFactory.placeOnMap(event.latLng, gUserMarker, gMap);
-			// enable the "Calculate routes" button
-			if (document.getElementById('opt-calcRoute-button').disabled) {
-				document.getElementById('opt-calcRoute-button').disabled = false;
+			if (gDistanceMeasureMode == 0) {
+				gUserMarker = MarkerFactory.placeOnMap(event.latLng, gUserMarker, gMap);
+				// enable the "Calculate routes" button
+				if (document.getElementById('opt-calcRoute-button').disabled) {
+					document.getElementById('opt-calcRoute-button').disabled = false;
+				}
 			}
+
 		});
+
+		gMeasureTool = new MeasureTool(gMap, {
+			showSegmentLength: false,
+			unit: MeasureTool.UnitTypeId.IMPERIAL
+		});
+
+		gMeasureTool.addListener('measure_start', function () {
+			gDistanceMeasureMode = 1;
+		});
+		gMeasureTool.addListener('measure_end', function () {
+			gDistanceMeasureMode = 0;
+		});
+
 	}
 
 	// When the calcMillRoute button is clicked, calculate and display route
@@ -350,7 +367,7 @@ app.controller('RouteFinderCtrl', ['$scope', '$rootScope', '$state', 'GoogleMaps
 	// Unbind from the calcMillRouteListener when scope is destroyed (i.e. when go to another state) to avoid memory leaks
 	$scope.$on('$destroy', calcOptimalRouteListener);
 
-	var calcOptimalRouteFromAccessPointListener = $rootScope.$on('accessPointDragend', function(){
+	var calcOptimalRouteFromAccessPointListener = $rootScope.$on('accessPointDragend', function () {
 		var accessPointMarker = MarkerFactory.getAccessPointMarker();
 		RouteFinderFactory.removeCurrentRoute();
 		RouteFinderFactory.calcMillRoute(accessPointMarker, gMap);
@@ -360,9 +377,9 @@ app.controller('RouteFinderCtrl', ['$scope', '$rootScope', '$state', 'GoogleMaps
 	var reverseOptimalRouteListener = $rootScope.$on('reverseOptimalDirections', function () {
 		var userMarker;
 		var accessPointMarker = MarkerFactory.getAccessPointMarker();
-		if(accessPointMarker == null || typeof accessPointMarker == 'undefined'){
+		if (accessPointMarker == null || typeof accessPointMarker == 'undefined') {
 			userMarker = gUserMarker;
-		}else{
+		} else {
 			userMarker = accessPointMarker;
 		}
 		RouteFinderFactory.reverseDirections(userMarker, gMap);
@@ -391,7 +408,7 @@ app.config(['$stateProvider', function ($stateProvider) {
 }]);
 app.factory('RouteSelectorFactory', ['Location', 'MarkerFactory', 'Cost', function (Location, MarkerFactory, Cost) {
 	var gDirectionsRenderer,
-	    gDirectionsRenderer2 = null;
+		gDirectionsRenderer2 = null;
 
 	var openAfterReverse = function (renderer, map) {
 		Location.updateText(renderer);
@@ -509,7 +526,7 @@ app.factory('RouteSelectorFactory', ['Location', 'MarkerFactory', 'Cost', functi
 }]);
 app.controller('RouteSelectorCtrl', ['$scope', '$rootScope', '$state', 'GoogleMaps', 'RouteSelectorFactory', 'MarkerFactory', 'Kml', function ($scope, $rootScope, $state, GoogleMaps, RouteSelectorFactory, MarkerFactory, Kml) {
 	var gMap,
-	    markers = [];
+		markers = [];
 
 	GoogleMaps.loadAPI.then(function () {
 		initMap();
@@ -739,7 +756,7 @@ app.factory('Location', ['UnitConvert', 'MarkerFactory', 'Cost', function (UnitC
 		calcShortestTravel: function (origin, destinations) {
 
 			var destCoordinates = [],
-			    durations = [];
+				durations = [];
 
 			for (var i = 0; i < destinations.length; i++) {
 				destCoordinates[i] = new google.maps.LatLng(destinations[i][7], destinations[i][8]);
@@ -868,7 +885,7 @@ app.factory('MarkerFactory', ['Mills', '$rootScope', function (Mills, $rootScope
 
 		geocoder.geocode({ latLng: pos }, function (results, status) {
 			if (status == google.maps.GeocoderStatus.OK) {
-				if (label === "D") title = "Destination";else title = "Logging Site";
+				if (label === "D") title = "Destination"; else title = "Logging Site";
 				// update the marker's infowindow information with the formatted address
 				updateInfoWindow(map, marker, title + "<br>" + results[0].formatted_address.slice(0, results[0].formatted_address.length - 5) + "<br> Lat: " + pos.lat().toFixed(4) + " Lng: " + pos.lng().toFixed(4));
 			} else {
@@ -886,15 +903,15 @@ app.factory('MarkerFactory', ['Mills', '$rootScope', function (Mills, $rootScope
 				for (var i = 0; i < mills.length; i++) {
 
 					var name = mills[i][1],
-					    address = mills[i][2],
-					    city = mills[i][3],
-					    state = mills[i][4],
-					    zip = mills[i][5],
-					    county = mills[i][6],
-					    lat = +mills[i][7],
-					    lng = +mills[i][8],
-					    itype = mills[i][9],
-					    latLngSet = new google.maps.LatLng(lat, lng);
+						address = mills[i][2],
+						city = mills[i][3],
+						state = mills[i][4],
+						zip = mills[i][5],
+						county = mills[i][6],
+						lat = +mills[i][7],
+						lng = +mills[i][8],
+						itype = mills[i][9],
+						latLngSet = new google.maps.LatLng(lat, lng);
 
 					var millContent = '<div class="map-content">' + 'Company name: ' + '<b>' + name + '</b>' + '<br />' + 'Industry type: ' + itype + '<br />' + 'Address: ' + address + '<br />' + 'City: ' + city + '<br />' + 'State: ' + state + '<br />' + 'Zip code: ' + zip + '<br />' + 'County: ' + county + '</div>';
 
@@ -977,36 +994,37 @@ app.factory('MarkerFactory', ['Mills', '$rootScope', function (Mills, $rootScope
 			var start = directionsRenderer.directions.routes[0].legs[0].start_location;
 			var end = directionsRenderer.directions.routes[0].legs[0].end_location;
 
-			if(Math.abs(end.lat() - start.lat()) > 0.001 || Math.abs(end.lng() - start.lng()) > 0.001) {
+			if (Math.abs(end.lat() - start.lat()) > 0.001 || Math.abs(end.lng() - start.lng()) > 0.001) {
 				// create an infowindow to display the address of the marker
 				var infoWindow = new google.maps.InfoWindow({
 					content: '<div style="width: 180px">Access Point<br />Lat: ' + start.lat().toFixed(4) + ' Lng: ' + start.lng().toFixed(4) + '</div>'
 				});
-				if (gAccessPointMarker == null || typeof gAccessPointMarker == 'undefined'){
+				if (gAccessPointMarker == null || typeof gAccessPointMarker == 'undefined') {
 					gAccessPointMarker = new google.maps.Marker({
 						draggable: true,
 						position: start,
 						map: map,
+						zIndex: Date.now(),
 						icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
 					});
 					// add click event to open infowindow when marker is clicked
-					google.maps.event.addListener(gAccessPointMarker, 'click', function(event) {
+					google.maps.event.addListener(gAccessPointMarker, 'click', function (event) {
 						infoWindow.open(map, gAccessPointMarker);
 					});
 					google.maps.event.addListener(gAccessPointMarker, 'dragend', function () {
 						$rootScope.$emit('accessPointDragend');
 					});
-				}else{
+				} else {
 					gAccessPointMarker.draggable = true;
 					gAccessPointMarker.setPosition(start);
 				}
-				
+
 			}
 		},
-		getAccessPointMarker:function()		{
+		getAccessPointMarker: function () {
 			return gAccessPointMarker;
 		},
-		setAccessPointMarker:function(accessPointMarker){
+		setAccessPointMarker: function (accessPointMarker) {
 			gAccessPointMarker = accessPointMarker;
 		}
 	};
