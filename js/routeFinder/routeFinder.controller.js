@@ -37,6 +37,10 @@ app.controller('RouteFinderCtrl', ['$scope','$rootScope','$state','GoogleMaps','
 	// Unbind from the calcMillRouteListener when scope is destroyed (i.e. when go to another state) to avoid memory leaks
 	$scope.$on('$destroy', calcOptimalRouteListener);
 
+	var calcOptimalRouteFromAccessPointListener = $rootScope.$on('accessPointDragend', function(){
+		console.log("accessPointDragend");
+	});
+
 	// When the reverse button is clicked, calculate and display reversed route
 	var reverseOptimalRouteListener = $rootScope.$on('reverseOptimalDirections', function () {
 		RouteFinderFactory.reverseDirections(gUserMarker, gMap);

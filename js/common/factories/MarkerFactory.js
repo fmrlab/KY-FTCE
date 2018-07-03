@@ -1,7 +1,7 @@
-app.factory('MarkerFactory', ['Mills', function (Mills) {
+app.factory('MarkerFactory', ['Mills', '$rootScope', function (Mills, $rootScope) {
 	var gMillMarkers = [];
 	var mills = Mills;
-
+	var gAccessPointMarker;
 
 	var updateInfoWindow = function (map, marker, contentString) {
 		// change the content of the infowindow
@@ -128,26 +128,33 @@ app.factory('MarkerFactory', ['Mills', function (Mills) {
 			var end = directionsRenderer.directions.routes[0].legs[0].end_location;
 
 			if(Math.abs(end.lat() - start.lat()) > 0.001 || Math.abs(end.lng() - start.lng()) > 0.001) {
-				var marker = new google.maps.Marker({
-					draggable: false,
-					position: start,
-					map: map,
-					icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
-					zIndex: -1
-				});
-
 				// create an infowindow to display the address of the marker
 				var infoWindow = new google.maps.InfoWindow({
 					content: '<div style="width: 180px">Access Point<br />Lat: ' + start.lat().toFixed(4) + ' Lng: ' + start.lng().toFixed(4) + '</div>'
 				});
-
-
-				// add click event to open infowindow when marker is clicked
-				google.maps.event.addListener(marker, 'click', function(event) {
-					infoWindow.open(map, marker);
-				});
+				if (gAccessPointMarker == null || typeof gAccessPointMarker == 'undefined'){
+					gAccessPointMarker = new google.maps.Marker({
+						draggable: true,
+						position: start,
+						map: map,
+						icon: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png'
+					});
+					// add click event to open infowindow when marker is clicked
+					google.maps.event.addListener(gAccessPointMarker, 'click', function(event) {
+						infoWindow.open(map, gAccessPointMarker);
+					});
+					google.maps.event.addListener(gAccessPointMarker, 'dragend', function () {
+						$rootScope.$emit('accessPointDragend');
+					});
+				}else{
+					gAccessPointMarker.setPosition(start);
+				}
+				
 			}
-		}		
+		},
+		getAccessPointMarker:function()		{
+			return gAccessPointMarker;
+		}
 	};
 
 	return MarkerFactory;

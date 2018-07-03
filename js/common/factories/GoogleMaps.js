@@ -4,7 +4,7 @@
 app.factory('GoogleMaps', ['$window', '$q', function ($window, $q) {
 
 	function loadScript() {
-		var gMapKey = 'AIzaSyCN9k-zbh2NrAynay5Tgz0400K1JsJpiJ4';
+		var gMapKey = 'AIzaSyBQzpglO-65VjZnsPSac1-rZ1JIduXdtZo';
 		var script = document.createElement('script');
 		script.src = 'https://maps.googleapis.com/maps/api/js?key=' + gMapKey + '&callback=apiLoaded'
 		document.body.appendChild(script);
