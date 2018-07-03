@@ -43,6 +43,7 @@ app.factory('RouteFinderFactory', ['MarkerFactory','Location','Mills','Cost', fu
 			})
 			.then(function (directionsRenderer) {
 				gDirectionsRenderer = directionsRenderer;
+				gDirectionsRenderer2 = null;
 				showCostInfo(directionsRenderer);
 
 				// Set google directions panel
@@ -58,24 +59,34 @@ app.factory('RouteFinderFactory', ['MarkerFactory','Location','Mills','Cost', fu
 			}
 
 		},
-		reverseDirections: function (marker, map) {
-			var rendererToRemove, rendererToDisplay;
-			var endPoint = marker.getPosition(); //user marker is now the end point
+		removeCurrentRoute:function(){
+			var rendererToRemove;
 
 			if(document.getElementById("opt-toFrom-txt").innerHTML == "to") {
-				document.getElementById("opt-toFrom-txt").innerHTML = "from";
-				rendererToDisplay = gDirectionsRenderer2;
 				rendererToRemove = gDirectionsRenderer;
 			}
 			else {
-				document.getElementById("opt-toFrom-txt").innerHTML = "to";
-				rendererToDisplay = gDirectionsRenderer;
 				rendererToRemove = gDirectionsRenderer2;
 			}
 
 			rendererToRemove.setMap(null);
 			rendererToRemove.setPanel(null);
 			rendererToRemove.infoWindow.close();
+		},
+		reverseDirections: function (marker, map) {
+			var rendererToDisplay;
+			var endPoint = marker.getPosition(); //user marker is now the end point
+
+			this.removeCurrentRoute();
+
+			if(document.getElementById("opt-toFrom-txt").innerHTML == "to") {
+				document.getElementById("opt-toFrom-txt").innerHTML = "from";
+				rendererToDisplay = gDirectionsRenderer2;
+			}
+			else {
+				document.getElementById("opt-toFrom-txt").innerHTML = "to";
+				rendererToDisplay = gDirectionsRenderer;
+			}
 
 			if(!gDirectionsRenderer2) {
 				Location.calcRoute(theClosestMill.latLng, endPoint)
