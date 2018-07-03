@@ -280,7 +280,27 @@ app.factory('RouteFinderFactory', ['MarkerFactory', 'Location', 'Mills', 'Cost',
 	};
 }]);
 
-app.controller('RouteFinderCtrl', ['$scope', '$rootScope', '$state', 'GoogleMaps', 'MarkerFactory', 'RouteFinderFactory', 'Kml', function ($scope, $rootScope, $state, GoogleMaps, MarkerFactory, RouteFinderFactory, Kml) {
+app.factory('SharedVariableFactory', function () {
+	var gZoom = 7;
+	var gCenterPoint = {lat: 37.791322359780914, lng: -85.01533446044925};
+	return {
+		getZoom: function () {
+			return gZoom;
+		},
+		setZoom: function (zoom) {
+			gZoom = zoom;
+		},
+		getMapCenterPoint: function () {
+			return gCenterPoint;
+		},
+		setMapCenterPoint: function (latitude, longitude) {
+			gCenterPoint = {lat: latitude, lng: longitude};
+		}
+	};
+	
+});
+
+app.controller('RouteFinderCtrl', ['$scope', '$rootScope', '$state', 'GoogleMaps', 'MarkerFactory', 'RouteFinderFactory', 'Kml', 'SharedVariableFactory', function ($scope, $rootScope, $state, GoogleMaps, MarkerFactory, RouteFinderFactory, Kml, SharedVariableFactory) {
 	var gMap, gUserMarker;
 
 	GoogleMaps.loadAPI.then(function () {
@@ -289,9 +309,12 @@ app.controller('RouteFinderCtrl', ['$scope', '$rootScope', '$state', 'GoogleMaps
 
 	function initMap() {
 
-		var mapCenterPoint = new google.maps.LatLng(37.791322359780914, -85.01533446044925);
+		var zoomLevel = SharedVariableFactory.getZoom();
+		var centerPointLatLng = SharedVariableFactory.getMapCenterPoint();
+		var mapCenterPoint = new google.maps.LatLng(centerPointLatLng.lat, centerPointLatLng.lng);
+
 		gMap = new google.maps.Map(document.getElementById('opt-map'), {
-			zoom: 7,
+			zoom: zoomLevel,
 			center: mapCenterPoint,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		});
@@ -300,6 +323,16 @@ app.controller('RouteFinderCtrl', ['$scope', '$rootScope', '$state', 'GoogleMaps
 		MarkerFactory.displayMarkers(gMap);
 
 		RouteFinderFactory.showLegend(gMap);
+		google.maps.event.addListener(gMap, 'zoom_changed', function() {
+			SharedVariableFactory.setZoom(gMap.getZoom());
+		});
+
+		google.maps.event.addListener(gMap, 'center_changed', function() {
+			var centerPoint = gMap.getCenter();
+			SharedVariableFactory.setMapCenterPoint(centerPoint.lat(), centerPoint.lng());
+		});
+		
+
 		// add click event to place a marker on the map
 		google.maps.event.addListener(gMap, 'click', function (event) {
 			gUserMarker = MarkerFactory.placeOnMap(event.latLng, gUserMarker, gMap);

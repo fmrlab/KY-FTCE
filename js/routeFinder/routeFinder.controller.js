@@ -1,4 +1,4 @@
-app.controller('RouteFinderCtrl', ['$scope','$rootScope','$state','GoogleMaps','MarkerFactory','RouteFinderFactory','Kml', function ($scope, $rootScope, $state, GoogleMaps, MarkerFactory, RouteFinderFactory, Kml) {
+app.controller('RouteFinderCtrl', ['$scope', '$rootScope', '$state', 'GoogleMaps', 'MarkerFactory', 'RouteFinderFactory', 'Kml', 'SharedVariableFactory', function ($scope, $rootScope, $state, GoogleMaps, MarkerFactory, RouteFinderFactory, Kml, SharedVariableFactory){
 	var gMap, gUserMarker;
 	
 	GoogleMaps.loadAPI
@@ -8,9 +8,12 @@ app.controller('RouteFinderCtrl', ['$scope','$rootScope','$state','GoogleMaps','
 
 	function initMap() {
 
-		var mapCenterPoint = new google.maps.LatLng(37.791322359780914, -85.01533446044925);
+		var zoomLevel = SharedVariableFactory.getZoom();
+		var centerPointLatLng = SharedVariableFactory.getMapCenterPoint();
+		var mapCenterPoint = new google.maps.LatLng(centerPointLatLng.lat, centerPointLatLng.lng);
+
 		gMap = new google.maps.Map(document.getElementById('opt-map'), {
-			zoom: 7,
+			zoom: zoomLevel,
 			center: mapCenterPoint,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		});
@@ -19,12 +22,21 @@ app.controller('RouteFinderCtrl', ['$scope','$rootScope','$state','GoogleMaps','
 		MarkerFactory.displayMarkers(gMap);
 
 		RouteFinderFactory.showLegend(gMap);
+		google.maps.event.addListener(gMap, 'zoom_changed', function() {
+			SharedVariableFactory.setZoom(gMap.getZoom());
+		});
+
+		google.maps.event.addListener(gMap, 'center_changed', function() {
+			var centerPoint = gMap.getCenter();
+			SharedVariableFactory.setMapCenterPoint(centerPoint.lat(), centerPoint.lng());
+		});
 		
+
 		// add click event to place a marker on the map
-		google.maps.event.addListener(gMap, 'click', function(event) {
+		google.maps.event.addListener(gMap, 'click', function (event) {
 			gUserMarker = MarkerFactory.placeOnMap(event.latLng, gUserMarker, gMap);
 			// enable the "Calculate routes" button
-			if(document.getElementById('opt-calcRoute-button').disabled) {
+			if (document.getElementById('opt-calcRoute-button').disabled) {
 				document.getElementById('opt-calcRoute-button').disabled = false;
 			}
 		});
