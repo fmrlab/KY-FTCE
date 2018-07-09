@@ -107,6 +107,7 @@ app.factory('MarkerFactory', ['Mills', '$rootScope', function (Mills, $rootScope
 			google.maps.event.addListener(userMarker, 'dragend', function() {
 				userMarker.infoWindow.close();
 				geocodePosition(userMarker, userMarker.getPosition(), map, label);
+				$rootScope.$emit('userMarkerDragend');
 			});
 			
 			// add click event to open infowindow when marker is clicked

@@ -450,36 +450,49 @@ app.factory('RouteSelectorFactory', ['Location', 'MarkerFactory', 'Cost', functi
 				document.getElementById('sel-calcRoute-button').disabled = true;
 			}
 		},
-		reverseDirections: function (marker1, marker2, map) {
-			var rendererToRemove, rendererToDisplay;
-			var startPoint = marker2.getPosition(); // start: Mill
-			var endPoint = marker1.getPosition(); // end: Logging Site
+		removeCurrentRoute:function(){
+			var rendererToRemove;
 
-			if (document.getElementById("sel-toFrom-txt").innerHTML == "to") {
-				document.getElementById("sel-toFrom-txt").innerHTML = "from";
-				rendererToDisplay = gDirectionsRenderer2;
+			if(document.getElementById("opt-toFrom-txt").innerHTML == "to") {
 				rendererToRemove = gDirectionsRenderer;
-			} else {
-				document.getElementById("sel-toFrom-txt").innerHTML = "to";
-				rendererToDisplay = gDirectionsRenderer;
+			}
+			else {
 				rendererToRemove = gDirectionsRenderer2;
 			}
 
 			rendererToRemove.setMap(null);
 			rendererToRemove.setPanel(null);
 			rendererToRemove.infoWindow.close();
+		},
+		reverseDirections: function (marker1, marker2, map) {
+			var rendererToDisplay;
+			var startPoint = marker2.getPosition(); // start: Mill
+			var endPoint = marker1.getPosition(); // end: Logging Site
+			this.removeCurrentRoute();
 
-			if (!gDirectionsRenderer2) {
-				Location.calcRoute(startPoint, endPoint).then(function (route) {
+			if(document.getElementById("sel-toFrom-txt").innerHTML == "to") {
+				document.getElementById("sel-toFrom-txt").innerHTML = "from";
+				rendererToDisplay = gDirectionsRenderer2;
+			}
+			else {
+				document.getElementById("sel-toFrom-txt").innerHTML = "to";
+				rendererToDisplay = gDirectionsRenderer;
+			}
+
+			if(!gDirectionsRenderer2) {
+				Location.calcRoute(startPoint, endPoint)
+				.then(function (route) {
 					return Location.displayRoute(route, map, null);
-				}).then(function (directionsRenderer) {
+				})
+				.then(function (directionsRenderer) {
 					gDirectionsRenderer2 = directionsRenderer;
 					showCostInfo(directionsRenderer);
 
 					openAfterReverse(gDirectionsRenderer2, map);
-				}).then(null, function (err) {
+				})
+				.then(null, function (err) {
 					console.error(err);
-				});
+				});	
 			} else {
 				showCostInfo(rendererToDisplay);
 				openAfterReverse(rendererToDisplay, map);
@@ -525,7 +538,7 @@ app.factory('RouteSelectorFactory', ['Location', 'MarkerFactory', 'Cost', functi
 	return RouteSelectorFactory;
 }]);
 app.controller('RouteSelectorCtrl', ['$scope', '$rootScope', '$state', 'GoogleMaps', 'RouteSelectorFactory', 'MarkerFactory', 'Kml', function ($scope, $rootScope, $state, GoogleMaps, RouteSelectorFactory, MarkerFactory, Kml) {
-	var gMap,
+	var gMap, calcRouteClicked,
 		markers = [];
 
 	GoogleMaps.loadAPI.then(function () {
@@ -540,6 +553,7 @@ app.controller('RouteSelectorCtrl', ['$scope', '$rootScope', '$state', 'GoogleMa
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		});
 
+		calcRouteClicked = false;
 		Kml.addKYBoundaryLayer(gMap);
 		MarkerFactory.displayMarkers(gMap);
 		RouteSelectorFactory.showLegend(gMap);
@@ -563,9 +577,19 @@ app.controller('RouteSelectorCtrl', ['$scope', '$rootScope', '$state', 'GoogleMa
 
 	var selectedRouteListener = $rootScope.$on('calcSelectedRoute', function () {
 		RouteSelectorFactory.getDirections(markers[0], markers[1], gMap);
+		calcRouteClicked = true;
 	});
 	// Unbind from the selectedRouteListener when scope is destroyed (i.e. when go to another state) to avoid memory leaks
 	$scope.$on('$destroy', selectedRouteListener);
+
+	var userMarkerDragEndListener = $rootScope.$on('userMarkerDragend', function (){
+		if (markers.length == 2 && calcRouteClicked == true){
+			RouteSelectorFactory.removeCurrentRoute();
+			RouteSelectorFactory.getDirections(markers[0], markers[1], gMap);
+		}
+	});
+
+	$scope.$on('$destroy', userMarkerDragEndListener);
 
 	var revSelectedRouteListener = $rootScope.$on('reverseSelectedDirections', function () {
 		RouteSelectorFactory.reverseDirections(markers[0], markers[1], gMap);
@@ -974,6 +998,7 @@ app.factory('MarkerFactory', ['Mills', '$rootScope', function (Mills, $rootScope
 			google.maps.event.addListener(userMarker, 'dragend', function () {
 				userMarker.infoWindow.close();
 				geocodePosition(userMarker, userMarker.getPosition(), map, label);
+				$rootScope.$emit('userMarkerDragend');
 			});
 
 			// add click event to open infowindow when marker is clicked

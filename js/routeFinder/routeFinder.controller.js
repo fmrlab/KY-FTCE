@@ -50,7 +50,9 @@ app.controller('RouteFinderCtrl', ['$scope', '$rootScope', '$state', 'GoogleMaps
 	$scope.$on('$destroy', calcOptimalRouteListener);
 
 	var calcOptimalRouteFromAccessPointListener = $rootScope.$on('accessPointDragend', function(){
-		console.log("accessPointDragend");
+		var accessPointMarker = MarkerFactory.getAccessPointMarker();
+		RouteFinderFactory.removeCurrentRoute();
+		RouteFinderFactory.calcMillRoute(accessPointMarker, gMap);
 	});
 
 	// When the reverse button is clicked, calculate and display reversed route

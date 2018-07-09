@@ -1,5 +1,6 @@
 app.controller('RouteSelectorCtrl', ['$scope','$rootScope','$state','GoogleMaps','RouteSelectorFactory','MarkerFactory','Kml', function ($scope, $rootScope, $state, GoogleMaps, RouteSelectorFactory, MarkerFactory, Kml) {
-	var gMap, markers = [];
+	var gMap, calcRouteClicked,
+		markers = [];
 
 	GoogleMaps.loadAPI
 	.then(function () {
@@ -14,6 +15,7 @@ app.controller('RouteSelectorCtrl', ['$scope','$rootScope','$state','GoogleMaps'
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		});
 
+		calcRouteClicked = false;
 		Kml.addKYBoundaryLayer(gMap);
 		MarkerFactory.displayMarkers(gMap);
 		RouteSelectorFactory.showLegend(gMap);
@@ -38,10 +40,21 @@ app.controller('RouteSelectorCtrl', ['$scope','$rootScope','$state','GoogleMaps'
 
 	var selectedRouteListener = $rootScope.$on('calcSelectedRoute', function () {
 		RouteSelectorFactory.getDirections(markers[0], markers[1], gMap);
+		calcRouteClicked = true;
 	});
+
 	// Unbind from the selectedRouteListener when scope is destroyed (i.e. when go to another state) to avoid memory leaks
 	$scope.$on('$destroy', selectedRouteListener);
 
+	var userMarkerDragEndListener = $rootScope.$on('userMarkerDragend', function (){
+		if (markers.length == 2 && calcRouteClicked == true){
+			RouteSelectorFactory.clearDirectionsAndCost();
+			RouteSelectorFactory.getDirections(markers[0], markers[1], gMap);
+		}
+	});
+
+	$scope.$on('$destroy', userMarkerDragEndListener);
+	
 	var revSelectedRouteListener = $rootScope.$on('reverseSelectedDirections', function () {
 		RouteSelectorFactory.reverseDirections(markers[0], markers[1], gMap);
 	});

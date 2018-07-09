@@ -45,25 +45,34 @@ app.factory('RouteSelectorFactory', ['Location','MarkerFactory','Cost', function
 				document.getElementById('sel-calcRoute-button').disabled = true;
 			}
 		},
-		reverseDirections: function (marker1, marker2, map) {
-			var rendererToRemove, rendererToDisplay;
-			var startPoint = marker2.getPosition(); // start: Mill
-			var endPoint = marker1.getPosition(); // end: Logging Site
+		removeCurrentRoute:function(){
+			var rendererToRemove;
 
-			if(document.getElementById("sel-toFrom-txt").innerHTML == "to") {
-				document.getElementById("sel-toFrom-txt").innerHTML = "from";
-				rendererToDisplay = gDirectionsRenderer2;
+			if(document.getElementById("opt-toFrom-txt").innerHTML == "to") {
 				rendererToRemove = gDirectionsRenderer;
 			}
 			else {
-				document.getElementById("sel-toFrom-txt").innerHTML = "to";
-				rendererToDisplay = gDirectionsRenderer;
 				rendererToRemove = gDirectionsRenderer2;
 			}
 
 			rendererToRemove.setMap(null);
 			rendererToRemove.setPanel(null);
 			rendererToRemove.infoWindow.close();
+		},
+		reverseDirections: function (marker1, marker2, map) {
+			var rendererToDisplay;
+			var startPoint = marker2.getPosition(); // start: Mill
+			var endPoint = marker1.getPosition(); // end: Logging Site
+			this.removeCurrentRoute();
+
+			if(document.getElementById("sel-toFrom-txt").innerHTML == "to") {
+				document.getElementById("sel-toFrom-txt").innerHTML = "from";
+				rendererToDisplay = gDirectionsRenderer2;
+			}
+			else {
+				document.getElementById("sel-toFrom-txt").innerHTML = "to";
+				rendererToDisplay = gDirectionsRenderer;
+			}
 
 			if(!gDirectionsRenderer2) {
 				Location.calcRoute(startPoint, endPoint)
