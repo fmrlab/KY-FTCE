@@ -48,13 +48,13 @@ app.controller('RouteSelectorCtrl', ['$scope','$rootScope','$state','GoogleMaps'
 
 	var userMarkerDragEndListener = $rootScope.$on('userMarkerDragend', function (){
 		if (markers.length == 2 && calcRouteClicked == true){
-			RouteSelectorFactory.clearDirectionsAndCost();
+			RouteSelectorFactory.removeCurrentRoute();
 			RouteSelectorFactory.getDirections(markers[0], markers[1], gMap);
 		}
 	});
 
 	$scope.$on('$destroy', userMarkerDragEndListener);
-	
+
 	var revSelectedRouteListener = $rootScope.$on('reverseSelectedDirections', function () {
 		RouteSelectorFactory.reverseDirections(markers[0], markers[1], gMap);
 	});

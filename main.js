@@ -450,10 +450,10 @@ app.factory('RouteSelectorFactory', ['Location', 'MarkerFactory', 'Cost', functi
 				document.getElementById('sel-calcRoute-button').disabled = true;
 			}
 		},
-		removeCurrentRoute:function(){
+		removeCurrentRoute: function () {
 			var rendererToRemove;
 
-			if(document.getElementById("opt-toFrom-txt").innerHTML == "to") {
+			if (document.getElementById("opt-toFrom-txt").innerHTML == "to") {
 				rendererToRemove = gDirectionsRenderer;
 			}
 			else {
@@ -470,7 +470,7 @@ app.factory('RouteSelectorFactory', ['Location', 'MarkerFactory', 'Cost', functi
 			var endPoint = marker1.getPosition(); // end: Logging Site
 			this.removeCurrentRoute();
 
-			if(document.getElementById("sel-toFrom-txt").innerHTML == "to") {
+			if (document.getElementById("sel-toFrom-txt").innerHTML == "to") {
 				document.getElementById("sel-toFrom-txt").innerHTML = "from";
 				rendererToDisplay = gDirectionsRenderer2;
 			}
@@ -479,20 +479,20 @@ app.factory('RouteSelectorFactory', ['Location', 'MarkerFactory', 'Cost', functi
 				rendererToDisplay = gDirectionsRenderer;
 			}
 
-			if(!gDirectionsRenderer2) {
+			if (!gDirectionsRenderer2) {
 				Location.calcRoute(startPoint, endPoint)
-				.then(function (route) {
-					return Location.displayRoute(route, map, null);
-				})
-				.then(function (directionsRenderer) {
-					gDirectionsRenderer2 = directionsRenderer;
-					showCostInfo(directionsRenderer);
+					.then(function (route) {
+						return Location.displayRoute(route, map, null);
+					})
+					.then(function (directionsRenderer) {
+						gDirectionsRenderer2 = directionsRenderer;
+						showCostInfo(directionsRenderer);
 
-					openAfterReverse(gDirectionsRenderer2, map);
-				})
-				.then(null, function (err) {
-					console.error(err);
-				});	
+						openAfterReverse(gDirectionsRenderer2, map);
+					})
+					.then(null, function (err) {
+						console.error(err);
+					});
 			} else {
 				showCostInfo(rendererToDisplay);
 				openAfterReverse(rendererToDisplay, map);
@@ -582,8 +582,8 @@ app.controller('RouteSelectorCtrl', ['$scope', '$rootScope', '$state', 'GoogleMa
 	// Unbind from the selectedRouteListener when scope is destroyed (i.e. when go to another state) to avoid memory leaks
 	$scope.$on('$destroy', selectedRouteListener);
 
-	var userMarkerDragEndListener = $rootScope.$on('userMarkerDragend', function (){
-		if (markers.length == 2 && calcRouteClicked == true){
+	var userMarkerDragEndListener = $rootScope.$on('userMarkerDragend', function () {
+		if (markers.length == 2 && calcRouteClicked == true) {
 			RouteSelectorFactory.removeCurrentRoute();
 			RouteSelectorFactory.getDirections(markers[0], markers[1], gMap);
 		}
@@ -1220,6 +1220,22 @@ app.directive('sidePanel', function () {
 app.directive('pageHeader', function () {
 	return {
 		restrict: 'E',
-		templateUrl: 'js/common/directives/pageHeader/pageHeader.html'
+		templateUrl: 'js/common/directives/pageHeader/pageHeader.html',
+		controller: 'pageHeaderCtrl'
 	};
 });
+app.controller('pageHeaderCtrl', ['$scope', '$uibModal', function ($scope, $uibModal) {
+	$scope.open = function () {
+		console.log("pageHeaderController");
+		var modalInstance = $uibModal.open({
+			templateUrl: 'js/common/directives/pageHeader/helpPage.html',
+			controller: 'helpWindowCtrl'
+		});
+	}
+}]);
+app.controller('helpWindowCtrl', ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
+	$scope.close = function () {
+		console.log("close");
+		$uibModalInstance.dismiss('cancel');
+	}
+}]);
